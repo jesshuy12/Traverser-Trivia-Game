@@ -1,5 +1,6 @@
 const btn = document.getElementById('modal_opener');
 const modal = document.querySelector('.modal');
+const modalContent = document.querySelector('.modal_content')
 
 function attachModalListeners(modalElm) {
   modalElm.querySelector('.close_modal').addEventListener('click', toggleModal);
@@ -29,29 +30,19 @@ btn.addEventListener('click', toggleModal);
 (function() {
   const myQuestions = [
     {
-      question: ` Consider the following Ruby code:
-      <ol>
-      <li>  $best_dog_ever = "Byron the Moyen Poodle"</li>
-      <li> </li>
-      <li>class OpinionatedClass</li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      </ol>
-      `,
+      question:`
+      Consider the following code:
+      <br>
+      <img src="./assets/question1.png" height="350" width="500">
+      <br>
+      <br>
+      What does the $ in front of $best_dog_ever signify?
+      <br>
+      <br>` ,
       answers: {
-        a: "Superman",
-        b: "The Terminator",
-        c: "Waluigi, obviously"
+        a: "A protected variable",
+        b: "A static variable",
+        c: "A global variable"
       },
       correctAnswer: "c"
     }
@@ -91,7 +82,7 @@ btn.addEventListener('click', toggleModal);
     quizContainer.innerHTML = output.join("");
   }
 
-  function showResults() {
+  function handleSubmit() {
     // gather answer containers from our quiz
     const answerContainers = quizContainer.querySelectorAll(".answers");
 
@@ -112,61 +103,31 @@ btn.addEventListener('click', toggleModal);
 
         // color the answers green
         answerContainers[questionNumber].style.color = "lightgreen";
+        setTimeout(function() {toggleModal()}, 5000)
+        modalContent.innerHTML = `Correct Answer! Game will resume in five seconds...`
       } else {
         // if answer is wrong or blank
         // color the answers red
         answerContainers[questionNumber].style.color = "red";
+        modalContent.innerHTML = `YOU'RE A LOSER`
       }
     });
 
-    // show number of correct answers out of total
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+
   }
 
-  function showSlide(n) {
-    slides[currentSlide].classList.remove("active-slide");
-    slides[n].classList.add("active-slide");
-    currentSlide = n;
-
-    if (currentSlide === 0) {
-      previousButton.style.display = "none";
-    } else {
-      previousButton.style.display = "inline-block";
-    }
-
-    if (currentSlide === slides.length - 1) {
-      nextButton.style.display = "none";
-      submitButton.style.display = "inline-block";
-    } else {
-      nextButton.style.display = "inline-block";
-      submitButton.style.display = "none";
-    }
-  }
-
-  function showNextSlide() {
-    showSlide(currentSlide + 1);
-  }
-
-  function showPreviousSlide() {
-    showSlide(currentSlide - 1);
-  }
 
   const quizContainer = document.getElementById("quiz");
-  const resultsContainer = document.getElementById("results");
+  // const resultsContainer = document.getElementById("results");
   const submitButton = document.getElementById("submit");
 
   // display quiz right away
   buildQuiz();
 
-  const previousButton = document.getElementById("previous");
-  const nextButton = document.getElementById("next");
-  const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
 
-  showSlide(0);
 
   // on submit, show results
-  submitButton.addEventListener("click", showResults);
-  previousButton.addEventListener("click", showPreviousSlide);
-  nextButton.addEventListener("click", showNextSlide);
+  submitButton.addEventListener("click", handleSubmit);
+
+
 }) ();
