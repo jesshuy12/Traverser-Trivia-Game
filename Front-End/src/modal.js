@@ -1,3 +1,14 @@
+let randomNum = Math.floor(Math.random() * 10)
+let myQuestions = []
+
+fetch(`http://localhost:3000/questions/1`
+)
+.then(res => res.json())
+.then(data => {
+  myQuestions = data
+})
+
+
 const btn = document.getElementById('modal_opener');
 const modal = document.querySelector('.modal');
 const modalContent = document.querySelector('.modal_content')
@@ -29,8 +40,9 @@ function toggleModal() {
 btn.addEventListener('click', toggleModal);
 
 (function() {
-  const myQuestions = [
+  myQuestions = [
     {
+      // change "question" to "url" when we get serializer working
       question:`
       Consider the following code:
       <br>
