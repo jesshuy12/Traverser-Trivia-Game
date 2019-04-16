@@ -29,29 +29,19 @@ btn.addEventListener('click', toggleModal);
 (function() {
   const myQuestions = [
     {
-      question: ` Consider the following Ruby code:
-      <ol>
-      <li>  $best_dog_ever = "Byron the Moyen Poodle"</li>
-      <li> </li>
-      <li>class OpinionatedClass</li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      <li> </li>
-      </ol>
-      `,
+      question:`
+      Consider the following code:
+      <br>
+      <img src="./assets/question1.png" height="350" width="500">
+      <br>
+      <br>
+      What does the $ in front of $best_dog_ever signify?
+      <br>
+      <br>` ,
       answers: {
-        a: "Superman",
-        b: "The Terminator",
-        c: "Waluigi, obviously"
+        a: "A protected variable",
+        b: "A static variable",
+        c: "A global variable"
       },
       correctAnswer: "c"
     }
