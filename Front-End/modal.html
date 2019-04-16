@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Vanilla Modal</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <!-- CSS Import -->
+    <link rel="stylesheet" href="css/modal.css" />
+  </head>
+  <body>
+    <!-- Clicking this button will open the modal -->
+    <button id="modal_opener">Collision</button>
+
+    <div class="modal" style="display: none">
+      <div class="overlay"></div>
+      <div class="modal_content">
+        <!-- Dynamic Section -->
+        <h2>You collided with a table 😩</h2>
+        <h3 style="text-align: center">Answer this question to proceed:</h3>
+        <div class="quiz-container">
+          <div id="quiz"></div>
+        </div>
+        <button id="previous">Previous Question</button>
+        <button id="next">Next Question</button>
+        <button id="submit">Submit Quiz</button>
+        <div id="results"></div>
+        <!-- End of Dynamic Section -->
+        <button title="Close" class="close_modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main script Import -->
+    <script src="src/modal.js"></script>
+  </body>
+</html>
