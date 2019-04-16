@@ -1,16 +1,17 @@
 const btn = document.getElementById('modal_opener');
 const modal = document.querySelector('.modal');
 const modalContent = document.querySelector('.modal_content')
+let newGame
 
-function attachModalListeners(modalElm) {
-  modalElm.querySelector('.close_modal').addEventListener('click', toggleModal);
-  modalElm.querySelector('.overlay').addEventListener('click', toggleModal);
-}
-
-function detachModalListeners(modalElm) {
-  modalElm.querySelector('.close_modal').removeEventListener('click', toggleModal);
-  modalElm.querySelector('.overlay').removeEventListener('click', toggleModal);
-}
+// function attachModalListeners(modalElm) {
+//   modalElm.querySelector('.close_modal').addEventListener('click', toggleModal);
+//   modalElm.querySelector('.overlay').addEventListener('click', toggleModal);
+// }
+//
+// function detachModalListeners(modalElm) {
+//   // modalElm.querySelector('.close_modal').removeEventListener('click', toggleModal);
+//   modalElm.querySelector('.overlay').removeEventListener('click', toggleModal);
+// }
 
 function toggleModal() {
   let currentState = modal.style.display;
@@ -18,10 +19,10 @@ function toggleModal() {
   // If modal is visible, hide it. Else, display it.
   if (currentState === 'none') {
     modal.style.display = 'block';
-    attachModalListeners(modal);
+    // attachModalListeners(modal);
   } else {
     modal.style.display = 'none';
-    detachModalListeners(modal);
+    // detachModalListeners(modal);
   }
 }
 
@@ -79,12 +80,16 @@ btn.addEventListener('click', toggleModal);
     });
 
     // finally combine our output list into one string of HTML and put it on the page
-    quizContainer.innerHTML = output.join("");
+    modalContent.innerHTML = output.join("")
+    modalContent.innerHTML += `<button id="submit">Submit</button>`;
+    // modalContent.innerHTML = output.join("");
+    const submitButton = document.getElementById("submit");
+    submitButton.addEventListener("click", handleSubmit);
   }
 
   function handleSubmit() {
     // gather answer containers from our quiz
-    const answerContainers = quizContainer.querySelectorAll(".answers");
+    const answerContainers = modalContent.querySelectorAll(".answers");
 
     // keep track of user's answers
     let numCorrect = 0;
@@ -100,34 +105,47 @@ btn.addEventListener('click', toggleModal);
       if (userAnswer === currentQuestion.correctAnswer) {
         // add to the number of correct answers
         numCorrect++;
-
+        newGame = false
         // color the answers green
         answerContainers[questionNumber].style.color = "lightgreen";
-        setTimeout(function() {toggleModal()}, 5000)
         modalContent.innerHTML = `Correct Answer! Game will resume in five seconds...`
+        setTimeout(function() {
+          toggleModal()
+          buildQuiz()
+          gameArea.stop() //stops the interval
+          obstacles = [] // resets the obstacles to nothing
+          startGame() // restarts the game
+        }, 3000)
       } else {
         // if answer is wrong or blank
         // color the answers red
+        newGame = true
         answerContainers[questionNumber].style.color = "red";
         modalContent.innerHTML = `YOU'RE A LOSER`
+        setTimeout(function() {
+          toggleModal()
+          buildQuiz()
+          gameArea.stop() //stops the interval
+          obstacles = [] // resets the obstacles to nothing
+        }, 3000)
       }
     });
 
 
   }
 
+  buildQuiz();
 
   const quizContainer = document.getElementById("quiz");
   // const resultsContainer = document.getElementById("results");
-  const submitButton = document.getElementById("submit");
+  // const submitButton = document.getElementById("submit");
 
   // display quiz right away
-  buildQuiz();
 
 
 
   // on submit, show results
-  submitButton.addEventListener("click", handleSubmit);
+  // submitButton.addEventListener("click", handleSubmit);
 
 
 }) ();
