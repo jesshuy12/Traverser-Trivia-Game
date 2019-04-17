@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas")
 const body = document.querySelector("body")
 const startButton = document.getElementById("button")
+const play = document.getElementById("play") // new button to play
 let player
 let obstacles = []
 let gameSpeed = 1
@@ -128,6 +129,13 @@ function stop() {
 //##############################################################################
 //Movement addEventListener
 
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
 document.onkeydown = function(e) {
   switch (e.keyCode) {
       case 37:
@@ -188,7 +196,8 @@ function fetchData() {
   })
 }
 
-startButton.addEventListener("click", function(e) {
+play.addEventListener("click", function(e) {
+
   gameArea.stop() //stops the interval
   obstacles = [] // resets the obstacles to nothing
   fetchData()

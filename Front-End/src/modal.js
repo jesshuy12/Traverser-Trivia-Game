@@ -28,7 +28,9 @@ function toggleModal() {
   }
 }
 
+
 const readyQuiz = function() {
+
 
   function buildQuiz() {
 
