@@ -5,3 +5,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+(1..2).each { |n| Question.create(url: "./assets/question#{n}.png")}
+
+Answer.create(text: "A protected variable", correct: false, question_id: 1)
+Answer.create(text: "A static variable", correct: false, question_id: 1)
+Answer.create(text: "A global variable", correct: true, question_id: 1)
+
+Answer.create(text: "16-bit bytes ", correct: false, question_id: 2)
+Answer.create(text: "12-bit bytes", correct: false, question_id: 2)
+Answer.create(text: "8-bit bytes", correct: true, question_id: 2)
