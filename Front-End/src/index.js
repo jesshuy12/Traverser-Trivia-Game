@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("canvas")
 const body = document.querySelector("body")
 const startButton = document.getElementById("button")
@@ -11,6 +10,9 @@ let x;
 let y;
 let score
 let playerScore
+
+// application state
+let myQuestions = []
 
 //##############################################################################
 //setting the canvas as the game area, and creates start, clear and, stop Functions
@@ -175,11 +177,30 @@ function startGame() {
     gameArea.start()
     player = new component(35, 35, "aqua", 10, 250) // create new player instance
     score = new component ("30px", "Consolas", "red", 50, 50, "text");
+
+
+
 } //startGame function
 
+function fetchData() {
+  // for each new game fetch and store all the questions
+  fetch(`http://localhost:3000/questions`
+  )
+  .then(res => res.json())
+  .then(data => {
+    myQuestions = data
+    // set an "asked" key with value false for each question
+    myQuestions.forEach(question => {
+      question["asked"] = "false"
+    })
+  })
+}
+
 play.addEventListener("click", function(e) {
+
   gameArea.stop() //stops the interval
   obstacles = [] // resets the obstacles to nothing
+  fetchData()
   startGame() // restarts the game
 })//end of start button event listener
 
@@ -188,6 +209,8 @@ function updateGameArea() {
       if (player.crash(obstacles[i])) {     //if player crashes into any of the objects
         gameArea.stop();                        //game stops
         playerScore = gameArea.frameNo
+        // build quiz goes here
+        readyQuiz()
         toggleModal()
         // alert("Game Over!")
         // return;

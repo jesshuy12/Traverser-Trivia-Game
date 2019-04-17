@@ -2,6 +2,8 @@ const btn = document.getElementById('modal_opener');
 const modal = document.querySelector('.modal');
 const modalContent = document.querySelector('.modal_content')
 let newGame
+let currentQuestion
+let userAnswer
 
 // function attachModalListeners(modalElm) {
 //   modalElm.querySelector('.close_modal').addEventListener('click', toggleModal);
@@ -26,89 +28,57 @@ function toggleModal() {
   }
 }
 
-// btn.addEventListener('click', toggleModal);
 
-(function() {
-  const myQuestions = [
-    {
-      question:`
-      Consider the following code:
-      <br>
-      <img src="./assets/question1.png" height="350" width="500">
-      <br>
-      <br>
-      What does the $ in front of $best_dog_ever signify?
-      <br>
-      <br>` ,
-      answers: {
-        a: "A protected variable",
-        b: "A static variable",
-        c: "A global variable"
-      },
-      correctAnswer: "c"
-    }
-  ];
+const readyQuiz = function() {
+
 
   function buildQuiz() {
-    // we'll need a place to store the HTML output
-    const output = [];
 
-    // for each question...
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      // we'll want to store the list of answer choices
-      const answers = [];
+    // select a question that hasn't been asked
+    currentQuestion = myQuestions.find(question => {
+      return question.asked === "false"
+    })
 
-      // and for each available answer...
-      for (letter in currentQuestion.answers) {
-        // ...add an HTML radio button
-        answers.push(
-          `<label>
-             <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-           </label>`
-        );
-      }
 
-      // add this question and its answers to the output
-      output.push(
-        `<div class="slide">
-           <div class="question"> ${currentQuestion.question} </div>
-           <div class="answers"> ${answers.join("")} </div>
-         </div>`
-      );
-    });
+    let quiz = `<h2>You collided with a pipe :( </h2>
+                <h3 style="text-align: center">Answer this question to proceed:</h3>
+                <img src="${currentQuestion.url}" height="175" width="490" > <br> <br>`
 
-    // finally combine our output list into one string of HTML and put it on the page
-    modalContent.innerHTML = output.join("")
-    modalContent.innerHTML += `<button id="submit">Submit</button>`;
-    // modalContent.innerHTML = output.join("");
+    modalContent.innerHTML = quiz
+
+    let answersForm = document.createElement('form')
+    modalContent.appendChild(answersForm)
+
+    let answerA = `<input type="radio" value="a" name="answer"> a: ${currentQuestion.answers["a"]}  `
+    let answerB = `<input type="radio" value="b" name="answer"> b: ${currentQuestion.answers["b"]}  `
+    let answerC = `<input type="radio" value="c" name="answer"> c: ${currentQuestion.answers["c"]}  `
+
+    answersForm.innerHTML += answerA
+    answersForm.innerHTML += answerB
+    answersForm.innerHTML += answerC
+
+    answersForm.innerHTML += `<br> <br> <button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
     const submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", handleSubmit);
+
   }
 
-  function handleSubmit() {
-    // gather answer containers from our quiz
-    const answerContainers = modalContent.querySelectorAll(".answers");
+  function handleSubmit(e) {
+    e.preventDefault()
+    // mark the question as asked
+    console.log(currentQuestion);
+    currentQuestion.asked = "true"
+    let correctAnswer = currentQuestion.correctAnswer
+    userAnswer = document.querySelector('input[name="answer"]:checked').value;
+    console.log(currentQuestion);
 
-    // keep track of user's answers
-    let numCorrect = 0;
-
-    // for each question...
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      // find selected answer
-      const answerContainer = answerContainers[questionNumber];
-      const selector = `input[name=question${questionNumber}]:checked`;
-      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-      // if answer is correct
-      if (userAnswer === currentQuestion.correctAnswer) {
+    if (userAnswer === correctAnswer) {
         // add to the number of correct answers
-        numCorrect++;
+        // numCorrect++;
         newGame = false
         // color the answers green
-        answerContainers[questionNumber].style.color = "lightgreen";
-        modalContent.innerHTML = `Correct Answer! Game will resume in five seconds...`
+        // answerContainers[questionNumber].style.color = "lightgreen";
+        modalContent.innerHTML = '<div style="text-align: center">Correct! Resuming in three seconds (your score will persist!)...</div>'
         setTimeout(function() {
           toggleModal()
           buildQuiz()
@@ -120,8 +90,8 @@ function toggleModal() {
         // if answer is wrong or blank
         // color the answers red
         newGame = true
-        answerContainers[questionNumber].style.color = "red";
-        modalContent.innerHTML = `YOU'RE A LOSER`
+        // answerContainers[questionNumber].style.color = "red";
+        modalContent.innerHTML = '<div style="text-align: center">Incorrect. This message will self-destruct in three seconds (click Play! to restart)...</div>'
         setTimeout(function() {
           toggleModal()
           buildQuiz()
@@ -129,23 +99,60 @@ function toggleModal() {
           obstacles = [] // resets the obstacles to nothing
         }, 3000)
       }
-    });
+
+
+
+    // // gather answer containers from our quiz
+    // const answerContainers = modalContent.querySelectorAll(".answers");
+    //
+    // // keep track of user's answers
+    // let numCorrect = 0;
+    //
+
+
+    // for each question...
+    // myQuestions.forEach((currentQuestion, questionNumber) => {
+    //   // find selected answer
+    //   const answerContainer = answerContainers[questionNumber];
+    //   const selector = `input[name=question${questionNumber}]:checked`;
+    //   const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+    //
+    //   // if answer is correct
+    //   if (userAnswer === currentQuestion.correctAnswer) {
+    //     // add to the number of correct answers
+    //     numCorrect++;
+    //     newGame = false
+    //     // color the answers green
+    //     answerContainers[questionNumber].style.color = "lightgreen";
+    //     modalContent.innerHTML = '<div style="text-align: center">Correct! Resuming in three seconds (your score will persist)...</div>'
+    //     setTimeout(function() {
+    //       toggleModal()
+    //       buildQuiz()
+    //       gameArea.stop() //stops the interval
+    //       obstacles = [] // resets the obstacles to nothing
+    //       startGame() // restarts the game
+    //     }, 3000)
+    //   } else {
+    //     // if answer is wrong or blank
+    //     // color the answers red
+    //     newGame = true
+    //     answerContainers[questionNumber].style.color = "red";
+    //     modalContent.innerHTML = '<div style="text-align: center">Incorrect. Game will reset in three seconds...</div>'
+    //     setTimeout(function() {
+    //       toggleModal()
+    //       buildQuiz()
+    //       gameArea.stop() //stops the interval
+    //       obstacles = [] // resets the obstacles to nothing
+    //     }, 3000)
+    //   }
+    // })
 
 
   }
 
   buildQuiz();
 
-  const quizContainer = document.getElementById("quiz");
-  // const resultsContainer = document.getElementById("results");
-  // const submitButton = document.getElementById("submit");
-
-  // display quiz right away
+  // const quizContainer = document.getElementById("quiz");
 
 
-
-  // on submit, show results
-  // submitButton.addEventListener("click", handleSubmit);
-
-
-}) ();
+}
