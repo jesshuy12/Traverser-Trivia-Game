@@ -26,7 +26,7 @@ function toggleModal() {
   }
 }
 
-btn.addEventListener('click', toggleModal);
+// btn.addEventListener('click', toggleModal);
 
 (function() {
   const myQuestions = [
