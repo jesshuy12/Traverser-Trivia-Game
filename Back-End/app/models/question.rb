@@ -6,6 +6,6 @@ class Question < ApplicationRecord
   end
 
   def wrong_answers
-    Answer.all.select {|answer| answer.correct == false}
+    Answer.all.select {|answer| answer.question_id == self.id && answer.correct == false}
   end
 end
