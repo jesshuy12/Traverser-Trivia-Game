@@ -28,41 +28,10 @@ const readyQuiz = function() {
     // })
 
     // select the first question in the array
-    currentQuestion = myQuestions.shift()
-
-
-    let quiz = `<h2>You collided with a pipe :( </h2>
-                <h3 style="text-align: center">Answer this question to proceed:</h3>
-                <img src="${currentQuestion.url}" height="175" width="490" class="center"> <br> <br>`
-
-    modalContent.innerHTML = quiz
-
-    let answersForm = document.createElement('form')
-    answersForm.className = "center-answers"
-    modalContent.appendChild(answersForm)
-
-    let answerA = `<input type="radio" value="a" name="answer"> a: ${currentQuestion.answers["a"]}  `
-    let answerB = `<input type="radio" value="b" name="answer"> b: ${currentQuestion.answers["b"]}  `
-    let answerC = `<input type="radio" value="c" name="answer"> c: ${currentQuestion.answers["c"]}  `
-
-    answersForm.innerHTML += answerA
-    answersForm.innerHTML += answerB
-    answersForm.innerHTML += answerC
-
-    modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
-    const submitButton = document.getElementById("submit");
-    submitButton.addEventListener("click", handleSubmit);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    // mark the question as asked
-    currentQuestion.asked = "true"
-    let correctAnswer = currentQuestion.correctAnswer
-    userAnswer = document.querySelector('input[name="answer"]:checked').value;
-
-    if (userAnswer === correctAnswer && myQuestions.length === 0) {
-      modalContent.innerHTML = '<div style="text-align: center">You answered all the questions! Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>'
+    if (myQuestions.length === 0) {
+      newGame = true
+      let endGameText = `<div style="text-align: center">Game over! Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
+      modalContent.innerHTML = endGameText
       const submitScoreButton = document.getElementById("submit-score")
       submitScoreButton.addEventListener("click", () => {
         let score = ++playerScore
@@ -74,6 +43,49 @@ const readyQuiz = function() {
           toggleModal()
         }, 2000)
       })
+    } else {
+      currentQuestion = myQuestions.shift()
+
+      let quiz = `<h2>You collided with a pipe :( </h2>
+                  <h3 style="text-align: center">Answer this question to proceed:</h3>
+                  <img src="${currentQuestion.url}" height="175" width="490" class="center"> <br> <br>`
+
+      modalContent.innerHTML = quiz
+
+      let answersForm = document.createElement('form')
+      answersForm.className = "center-answers"
+      modalContent.appendChild(answersForm)
+
+      let answerA = `<input type="radio" value="a" name="answer"> a: ${currentQuestion.answers["a"]}  `
+      let answerB = `<input type="radio" value="b" name="answer"> b: ${currentQuestion.answers["b"]}  `
+      let answerC = `<input type="radio" value="c" name="answer"> c: ${currentQuestion.answers["c"]}  `
+
+      answersForm.innerHTML += answerA
+      answersForm.innerHTML += answerB
+      answersForm.innerHTML += answerC
+
+      modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
+      const submitButton = document.getElementById("submit");
+      submitButton.addEventListener("click", handleSubmit);
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    // mark the question as asked
+    currentQuestion.asked = "true"
+    let correctAnswer = currentQuestion.correctAnswer
+    userAnswer = document.querySelector('input[name="answer"]:checked').value;
+
+    if (userAnswer === correctAnswer && myQuestions.length === 0) {
+      newGame = false
+      modalContent.innerHTML = '<div style="text-align: center">You answered the final question correctly! The last round will resume in five seconds (make it count!)...</div>'
+      setTimeout(function() {
+        toggleModal()
+        gameArea.stop() //stops the interval
+        obstacles = [] // resets the obstacles to nothing
+        startGame() // restarts the game
+      }, 5000)
     } else if (userAnswer === correctAnswer) {
         // add to the number of correct answers
         // numCorrect++;
