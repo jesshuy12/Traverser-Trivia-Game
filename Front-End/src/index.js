@@ -2,6 +2,8 @@ const canvas = document.getElementById("canvas")
 const body = document.querySelector("body")
 const startButton = document.getElementById("button")
 const play = document.getElementById("play") // new button to play
+const scoresButton = document.getElementById("scores")
+const overlay = document.querySelector(".overlay")
 let player
 let obstacles = []
 let gameSpeed = 1
@@ -10,6 +12,7 @@ let x;
 let y;
 let score
 let playerScore
+let topTen = []
 
 // application state
 let myQuestions = []
@@ -82,6 +85,8 @@ function component (width, height, color, x, y, type) {
     }
     if (this.x < 0) {
       this.x = 0
+    } else if (this.x > 960) {
+      this.x = 960
     }
   }//end of newPosition Function
 
@@ -193,7 +198,15 @@ function fetchData() {
     myQuestions.forEach(question => {
       question["asked"] = "false"
     })
+    shuffleArray(myQuestions)
   })
+}
+
+function shuffleArray(array) {
+   for (let i = array.length - 1; i > 0; i--) {
+       const j = Math.floor(Math.random() * (i + 1));
+       [array[i], array[j]] = [array[j], array[i]];
+   }
 }
 
 play.addEventListener("click", function(e) {
@@ -240,3 +253,33 @@ function updateGameArea() {
     player.newPosition()
     player.update()
   }//end of updateGameArea
+
+function fetchScores() {
+  fetch('http://localhost:3000/statistics')
+  .then(res => res.json())
+  .then(scores => {
+    topTen = scores
+  })
+}
+
+// fetchScores()
+
+scores.addEventListener('click', () => {
+  fetchScores()
+  toggleModal()
+  modalContent.innerHTML = '<div style="text-align: center">Loading...</div>'
+  setTimeout(function() {scoreContent = `<div style="text-align: center">Top Scores</div>
+                  <ol class="center-ol">
+                  ${topTen.map( (stat, index) => {
+                    return `${index + 1}. ${stat.name}: ${stat.score} <br>`
+                  }).join("")}
+                  </ol>
+                  `
+  // modalContent.innerHTML = ''
+  modalContent.innerHTML = scoreContent}, 1000)
+
+})
+
+overlay.addEventListener("click", function(e) {
+  toggleModal()
+})

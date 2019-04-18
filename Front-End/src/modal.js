@@ -1,6 +1,7 @@
 const btn = document.getElementById('modal_opener');
 const modal = document.querySelector('.modal');
 const modalContent = document.querySelector('.modal_content')
+
 let newGame
 let currentQuestion
 let userAnswer
@@ -22,17 +23,22 @@ const readyQuiz = function() {
   function buildQuiz() {
 
     // select a question that hasn't been asked
-    currentQuestion = myQuestions.find(question => {
-      return question.asked === "false"
-    })
+    // currentQuestion = myQuestions.find(question => {
+    //   return question.asked === "false"
+    // })
+
+    // select the first question in the array
+    currentQuestion = myQuestions.shift()
+
 
     let quiz = `<h2>You collided with a pipe :( </h2>
                 <h3 style="text-align: center">Answer this question to proceed:</h3>
-                <img src="${currentQuestion.url}" height="175" width="490" > <br> <br>`
+                <img src="${currentQuestion.url}" height="175" width="490" class="center"> <br> <br>`
 
     modalContent.innerHTML = quiz
 
     let answersForm = document.createElement('form')
+    answersForm.className = "center-answers"
     modalContent.appendChild(answersForm)
 
     let answerA = `<input type="radio" value="a" name="answer"> a: ${currentQuestion.answers["a"]}  `
@@ -43,7 +49,7 @@ const readyQuiz = function() {
     answersForm.innerHTML += answerB
     answersForm.innerHTML += answerC
 
-    answersForm.innerHTML += `<br> <br> <button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
+    modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
     const submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", handleSubmit);
   }
@@ -55,14 +61,26 @@ const readyQuiz = function() {
     let correctAnswer = currentQuestion.correctAnswer
     userAnswer = document.querySelector('input[name="answer"]:checked').value;
 
-    if (userAnswer === correctAnswer) {
+    if (userAnswer === correctAnswer && myQuestions.length === 0) {
+      modalContent.innerHTML = '<div style="text-align: center">You answered all the questions! Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>'
+      const submitScoreButton = document.getElementById("submit-score")
+      submitScoreButton.addEventListener("click", () => {
+        let score = ++playerScore
+        let username = document.getElementById("username").value
+        postScore(username, score)
+        gameArea.clear()
+        modalContent.innerHTML = `<div style="text-align: center">Score saved! Press Play to start a new game</div>`
+        setTimeout(function() {
+          toggleModal()
+        }, 2000)
+      })
+    } else if (userAnswer === correctAnswer) {
         // add to the number of correct answers
         // numCorrect++;
         newGame = false
         modalContent.innerHTML = '<div style="text-align: center">Correct! Resuming in three seconds (your score will persist!)...</div>'
         setTimeout(function() {
           toggleModal()
-          buildQuiz()
           gameArea.stop() //stops the interval
           obstacles = [] // resets the obstacles to nothing
           startGame() // restarts the game
@@ -70,30 +88,34 @@ const readyQuiz = function() {
       } else {
         // if answer is wrong or blank
         newGame = true
-        let endGameText = `<div style="text-align: center">Incorrect. Enter username to save your score: <form><input><button ></form> </div>`
+        let endGameText = `<div style="text-align: center">Incorrect. Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
         modalContent.innerHTML = endGameText
-
-
-        // setTimeout(function() {
-        //   toggleModal()
-        //   buildQuiz()
-        //   gameArea.stop() //stops the interval
-        //   obstacles = [] // resets the obstacles to nothing
-        // }, 3000)
+        const submitScoreButton = document.getElementById("submit-score")
+        submitScoreButton.addEventListener("click", () => {
+          let score = ++playerScore
+          let username = document.getElementById("username").value
+          postScore(username, score)
+          gameArea.clear()
+          modalContent.innerHTML = `<div style="text-align: center">Score saved! Press Play to start a new game</div>`
+          setTimeout(function() {
+            toggleModal()
+          }, 2000)
+        })
       }
   }
 
-  function postScore() {
-    fetch('https://localhost:3000/statistics', {
+  function postScore(username, score) {
+    fetch('http://localhost:3000/statistics', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: {
-
-      }
-    })
-  }
+      body: JSON.stringify({
+          name: username,
+          score: score
+        })
+      })
+    }
 
   buildQuiz();
 }
