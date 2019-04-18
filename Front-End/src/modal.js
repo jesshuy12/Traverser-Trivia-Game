@@ -59,8 +59,6 @@ const readyQuiz = function() {
         // add to the number of correct answers
         // numCorrect++;
         newGame = false
-        // color the answers green
-        // answerContainers[questionNumber].style.color = "lightgreen";
         modalContent.innerHTML = '<div style="text-align: center">Correct! Resuming in three seconds (your score will persist!)...</div>'
         setTimeout(function() {
           toggleModal()
@@ -71,17 +69,30 @@ const readyQuiz = function() {
         }, 3000)
       } else {
         // if answer is wrong or blank
-        // color the answers red
         newGame = true
-        // answerContainers[questionNumber].style.color = "red";
-        modalContent.innerHTML = '<div style="text-align: center">Incorrect. This message will self-destruct in three seconds (click Play! to restart)...</div>'
-        setTimeout(function() {
-          toggleModal()
-          buildQuiz()
-          gameArea.stop() //stops the interval
-          obstacles = [] // resets the obstacles to nothing
-        }, 3000)
+        let endGameText = `<div style="text-align: center">Incorrect. Enter username to save your score: <form><input><button ></form> </div>`
+        modalContent.innerHTML = endGameText
+
+
+        // setTimeout(function() {
+        //   toggleModal()
+        //   buildQuiz()
+        //   gameArea.stop() //stops the interval
+        //   obstacles = [] // resets the obstacles to nothing
+        // }, 3000)
       }
+  }
+
+  function postScore() {
+    fetch('https://localhost:3000/statistics', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+
+      }
+    })
   }
 
   buildQuiz();
