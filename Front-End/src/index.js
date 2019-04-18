@@ -264,7 +264,7 @@ function fetchScores() {
 
 // fetchScores()
 
-scores.addEventListener('click', () => {
+scoresButton.addEventListener('click', () => {
   fetchScores()
   toggleModal()
   modalContent.innerHTML = '<div style="text-align: center">Loading...</div>'
@@ -281,5 +281,8 @@ scores.addEventListener('click', () => {
 })
 
 overlay.addEventListener("click", function(e) {
-  toggleModal()
+  const modalContent = document.querySelector('.modal_content')
+  if (modalContent.innerText.includes("Top Scores")) {
+    toggleModal()
+  }
 })
