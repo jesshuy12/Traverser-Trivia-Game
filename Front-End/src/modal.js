@@ -56,11 +56,18 @@ const readyQuiz = function() {
 
       answersForm.innerHTML += `${answerA}<br>`
       answersForm.innerHTML += `${answerB}<br>`
-      answersForm.innerHTML += `${answerC}<br>`
+      answersForm.innerHTML += `${answerC}<br><br>`
 
-      modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;" class="form-submit-button">Submit</button>`;
-      const submitButton = document.getElementById("submit");
-      submitButton.addEventListener("click", handleSubmit);
+      let newSubmitButton = document.createElement('button')
+      newSubmitButton.id = "submit"
+      newSubmitButton.style = "display: block; margin: 0 auto;"
+      newSubmitButton.className = "form-submit-button"
+      newSubmitButton.innerText = "Submit"
+      answersForm.appendChild(newSubmitButton)
+
+      // modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;" class="form-submit-button">Submit</button>`;
+      newSubmitButton = document.getElementById("submit");
+      newSubmitButton.addEventListener("click", handleSubmit);
     }
   }
 
