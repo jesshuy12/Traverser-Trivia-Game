@@ -277,18 +277,18 @@ scoresButton.addEventListener('click', () => {
                   }).join("")}
                   </ol>
                   `
-                  
+
   modalContent.innerHTML = scoreContent}, 1000)
 })
 
 instructions.addEventListener("click", function(e) {
   toggleModal()
-  modalContent.innerHTML = '<div style="text-align: center">Dodge the Pipes <br> Keys: Up, Down, Left, Right <br> Answer Trivia Correct to Continue Game <br> Answer Trivia Incorrect, you Lose</div>'
+  modalContent.innerHTML = '<div style="text-align: center" id="modal-text">Dodge the Pipes <br> Keys: Up, Down, Left, Right <br> Answer Trivia Correct to Continue Game <br> Answer Trivia Incorrect, you lose</div>'
 })//end of instructions addEventListener
 
 about.addEventListener("click", function(e) {
   toggleModal()
-  modalContent.innerHTML = '<div style="text-align: center">Created By: <br> Dave and Jessy</div>'
+  modalContent.innerHTML = '<div style="text-align: center" id="modal-text">Created By: <br> Dave and Jessy</div>'
 })//end of instructions addEventListener
 
 overlay.addEventListener("click", function(e) {
