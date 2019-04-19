@@ -65,7 +65,6 @@ const readyQuiz = function() {
       newSubmitButton.innerText = "Submit"
       answersForm.appendChild(newSubmitButton)
 
-      // modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;" class="form-submit-button">Submit</button>`;
       newSubmitButton = document.getElementById("submit");
       newSubmitButton.addEventListener("click", handleSubmit);
     }
