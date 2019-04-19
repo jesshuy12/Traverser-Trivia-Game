@@ -17,20 +17,14 @@ function toggleModal() {
   }
 }
 
-
 const readyQuiz = function() {
 
   function buildQuiz() {
 
-    // select a question that hasn't been asked
-    // currentQuestion = myQuestions.find(question => {
-    //   return question.asked === "false"
-    // })
-
     // select the first question in the array
     if (myQuestions.length === 0) {
       newGame = true
-      let endGameText = `<div style="text-align: center">Game over! Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
+      let endGameText = `<div style="text-align: center" id="modal-text">Game over! Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
       modalContent.innerHTML = endGameText
       const submitScoreButton = document.getElementById("submit-score")
       submitScoreButton.addEventListener("click", () => {
@@ -38,7 +32,7 @@ const readyQuiz = function() {
         let username = document.getElementById("username").value
         postScore(username, score)
         gameArea.clear()
-        modalContent.innerHTML = `<div style="text-align: center">Score saved! Press Play to start a new game</div>`
+        modalContent.innerHTML = `<div style="text-align: center" id="modal-text">Score saved! Press Play to start a new game</div>`
         setTimeout(function() {
           toggleModal()
         }, 2000)
@@ -46,9 +40,9 @@ const readyQuiz = function() {
     } else {
       currentQuestion = myQuestions.shift()
 
-      let quiz = `<h2>You collided with a pipe :( </h2>
-                  <h3 style="text-align: center">Answer this question to proceed:</h3>
-                  <img src="${currentQuestion.url}" height="175" width="490" class="center"> <br> <br>`
+      let quiz = `<h2 id="modal-text">You collided with a column!</h2>
+                  <h3 style="text-align: center" id="modal-text">Answer this question to proceed:</h3>
+                  <img src="${currentQuestion.url}" height="320" width="525" class="center"> <br> <br>`
 
       modalContent.innerHTML = quiz
 
@@ -60,11 +54,11 @@ const readyQuiz = function() {
       let answerB = `<input type="radio" value="b" name="answer"> b: ${currentQuestion.answers["b"]}  `
       let answerC = `<input type="radio" value="c" name="answer"> c: ${currentQuestion.answers["c"]}  `
 
-      answersForm.innerHTML += answerA
-      answersForm.innerHTML += answerB
-      answersForm.innerHTML += answerC
+      answersForm.innerHTML += `${answerA}<br>`
+      answersForm.innerHTML += `${answerB}<br>`
+      answersForm.innerHTML += `${answerC}<br>`
 
-      modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;">Submit</button>`;
+      modalContent.innerHTML += `<button id="submit" style="display: block; margin: 0 auto;" class="form-submit-button">Submit</button>`;
       const submitButton = document.getElementById("submit");
       submitButton.addEventListener("click", handleSubmit);
     }
@@ -79,7 +73,7 @@ const readyQuiz = function() {
 
     if (userAnswer === correctAnswer && myQuestions.length === 0) {
       newGame = false
-      modalContent.innerHTML = '<div style="text-align: center">You answered the final question correctly! The last round will resume in five seconds (make it count!)...</div>'
+      modalContent.innerHTML = '<div style="text-align: center" id="modal-text">You answered the final question correctly! The last round will resume in five seconds (make it count!)...</div>'
       setTimeout(function() {
         toggleModal()
         gameArea.stop() //stops the interval
@@ -87,10 +81,8 @@ const readyQuiz = function() {
         startGame() // restarts the game
       }, 5000)
     } else if (userAnswer === correctAnswer) {
-        // add to the number of correct answers
-        // numCorrect++;
         newGame = false
-        modalContent.innerHTML = '<div style="text-align: center">Correct! Resuming in three seconds (your score will persist!)...</div>'
+        modalContent.innerHTML = '<div style="text-align: center" id="modal-text">Correct! Resuming in three seconds (your score will persist!)...</div>'
         setTimeout(function() {
           toggleModal()
           gameArea.stop() //stops the interval
@@ -100,7 +92,7 @@ const readyQuiz = function() {
       } else {
         // if answer is wrong or blank
         newGame = true
-        let endGameText = `<div style="text-align: center">Incorrect. Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
+        let endGameText = `<div style="text-align: center" id="modal-text">Incorrect. Enter username to save your score: <input id="username"><input type="submit" value="Save score" id="submit-score"></div>`
         modalContent.innerHTML = endGameText
         const submitScoreButton = document.getElementById("submit-score")
         submitScoreButton.addEventListener("click", () => {
@@ -108,7 +100,7 @@ const readyQuiz = function() {
           let username = document.getElementById("username").value
           postScore(username, score)
           gameArea.clear()
-          modalContent.innerHTML = `<div style="text-align: center">Score saved! Press Play to start a new game</div>`
+          modalContent.innerHTML = `<div style="text-align: center" id="modal-text">Score saved! Press Play to start a new game</div>`
           setTimeout(function() {
             toggleModal()
           }, 2000)
