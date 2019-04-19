@@ -267,15 +267,15 @@ function fetchScores() {
 scoresButton.addEventListener('click', () => {
   fetchScores()
   toggleModal()
-  modalContent.innerHTML = '<div style="text-align: center">Loading...</div>'
-  setTimeout(function() {scoreContent = `<div style="text-align: center">Top Scores</div>
-                  <ol class="center-ol">
+  modalContent.innerHTML = '<div style="text-align: center" id="modal-text">Loading...</div>'
+  setTimeout(function() {scoreContent = `<div style="text-align: center" id="modal-text">Top Scores</div>
+                  <ol class="center-ol" id="modal-text">
                   ${topTen.map( (stat, index) => {
-                    return `${index + 1}. ${stat.name}: ${stat.score} <br>`
+                    return `${index + 1}. ${stat.name} - <span id="mt-color">${stat.score}</span> <br>`
                   }).join("")}
                   </ol>
                   `
-  // modalContent.innerHTML = ''
+                  
   modalContent.innerHTML = scoreContent}, 1000)
 
 })
@@ -285,4 +285,6 @@ overlay.addEventListener("click", function(e) {
   if (modalContent.innerText.includes("Top Scores")) {
     toggleModal()
   }
+
+
 })
