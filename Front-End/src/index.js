@@ -182,7 +182,7 @@ document.onkeyup = function(e) {
 
 function startGame() {
     gameArea.start()
-    player = new component(35, 35, "aqua", 10, 250) // create new player instance
+    player = new component(40, 40, "aqua", 10, 250) // create new player instance
     score = new component ("30px", "Consolas", "red", 50, 50, "text");
 
 
@@ -222,6 +222,15 @@ play.addEventListener("click", function(e) {
 function updateGameArea() {
     for (i = 0; i < obstacles.length; i += 1) { //loops for the obstacles array
       if (player.crash(obstacles[i])) {     //if player crashes into any of the objects
+        if (player.crash(obstacles[i+1])){
+          gameArea.stop();                        //game stops
+          playerScore = gameArea.frameNo
+          // build quiz goes here
+          readyQuiz()
+          toggleModal()
+        }
+
+        console.log(obstacles[i]);
         gameArea.stop();                        //game stops
         playerScore = gameArea.frameNo
         // build quiz goes here
@@ -243,8 +252,10 @@ function updateGameArea() {
       maxGap = 175;
       gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);// creates random sized gap for obstacle
       //component (width, height, color, x, y)
-      obstacles.push(new component(35, height, "SlateGray ", x, 0)); //top obstacle
-      obstacles.push(new component(35, x - height - gap, "SlateGray ", x, height + gap));
+      obstacles.push(new component(55, height, "SlateGray ", x, 0)); //top obstacle
+      obstacles.push(new component(55, 50, "SlateGray ", x, height + gap));
+      obstacles.push(new component(55, 50, "Yellow ", x, height + 50 + gap));
+      obstacles.push(new component(55, 400, "SlateGray ", x, height + gap + 100));
     }
     for (i = 0; i < obstacles.length; i += 1) {
       obstacles[i].x += obstacleSpacing;
