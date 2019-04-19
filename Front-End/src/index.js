@@ -3,6 +3,8 @@ const body = document.querySelector("body")
 const startButton = document.getElementById("button")
 const play = document.getElementById("play") // new button to play
 const scoresButton = document.getElementById("scores")
+const instructions = document.getElementById("instructions")
+const about = document.getElementById("about")
 const overlay = document.querySelector(".overlay")
 let player
 let obstacles = []
@@ -277,12 +279,21 @@ scoresButton.addEventListener('click', () => {
                   `
   // modalContent.innerHTML = ''
   modalContent.innerHTML = scoreContent}, 1000)
-
 })
+
+instructions.addEventListener("click", function(e) {
+  toggleModal()
+  modalContent.innerHTML = '<div style="text-align: center">Dodge the Pipes <br> Keys: Up, Down, Left, Right <br> Answer Trivia Correct to Continue Game <br> Answer Trivia Incorrect, you Lose</div>'
+})//end of instructions addEventListener
+
+about.addEventListener("click", function(e) {
+  toggleModal()
+  modalContent.innerHTML = '<div style="text-align: center">Created By: <br> Dave and Jessy</div>'
+})//end of instructions addEventListener
 
 overlay.addEventListener("click", function(e) {
   const modalContent = document.querySelector('.modal_content')
-  if (modalContent.innerText.includes("Top Scores")) {
+  if (modalContent.innerText.includes("Top Scores") || modalContent.innerText.includes("Dodge") || modalContent.innerText.includes("Dave")) {
     toggleModal()
   }
 })
